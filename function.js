@@ -66,9 +66,13 @@ function clearCalculator() {
 
 //setting the nummbers to variables and print them to the screen
 function getNumber(number) {
-    currentNum += Number(number);
-    displaySct2.textContent = previousNum + operator + currentNum;
-    console.log(number);
+    if (currentNum.length >= 6) {
+        key.disabled = true;
+    } else {
+        currentNum += Number(number);
+        displaySct2.textContent = previousNum + operator + currentNum;
+        console.log(number);
+    };
 };
 
 //setting the operators to variables
@@ -82,14 +86,31 @@ function getOperator(op) {
         displaySct2.textContent = previousNum + operator;
         currentNum = '';
         decimal.disabled = false;
+        key.disabled = false;
     };
 };
 
 //check if user try to divide by 0
+function changeDS2FontSize(size) {
+    switch (size) {
+        case 'big': 
+        displaySct2.style.fontSize = '2em';
+            break;
+        case 'small': 
+        displaySct2.style.fontSize = '1.5em';
+            break;
+        default:
+            displaySct2.style.fontSize = '2em';
+            break;
+
+    }
+}
+
 function evaluate0() {
     if (currentNum == 0 || previousNum == 0 && operator == '/') {
-        displaySct2.textContent = 'You can\'t devide by 0';
         displaySct1.textContent = 'ERROR!';
+        changeDS2FontSize('small');
+        displaySct2.textContent = 'You can\'t divide a number by 0';
         throw new Error('You can\'t divide by 0');
     };
 };
@@ -121,11 +142,20 @@ function calculate(num1, sign, num2) {
                 break;
         }
         //checks if the numbers is a float, so it can print the decimals
-        if (result % 1 !== 0) {
+        if (result.toString().length > 10) {
+            clearCalculator();
+            displaySct1.textContent = 'ERROR!';
+            changeDS2FontSize('small');
+            displaySct2.textContent = 'Number is too big';
+        } else if (result % 1 !== 0) {
             result = result.toFixed(2);
-        };
-        displaySct1.textContent = displaySct2.textContent;
-        displaySct2.textContent = result;
+        } else {
+            displaySct1.textContent = displaySct2.textContent;
+            displaySct2.textContent = result;
+            console.log(`result length is: ${result.length}`);
+        }
+        key.disabled = true;
+        changeDS2FontSize('big');
     } catch (error) {
         console.log(error.message);
         return;
