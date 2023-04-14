@@ -29,12 +29,39 @@ key.forEach((btn) => {
 });
 
 //getting the operator btn
+
+/*
 operatorBtn.forEach((btn) => {
     btn.addEventListener('click', (e) => {
         getOperator(e.target.textContent);
     });
 });
+*/
+operatorBtn.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+        if (operator !== '') {
+            calculate(previousNum, operator, currentNum);
+            currentNum = result;
+            result = '';
+            previousNum = result;
+        }
+        operator = e.target.textContent.trim();
+        if (currentNum == '') {      //add the option to insert negative numbers
+            currentNum += operator;
+            operator ='';
+            displaySct2.textContent = currentNum;
+        } else {
+            previousNum = currentNum;
+            displaySct2.textContent = previousNum + operator;
+            currentNum = '';
+            decimal.disabled = false;
+            key.disabled = false;
+        };
+    });
+});
 
+
+//on equal button press, will execute calculate funtion, and console.log provided info
 equal.addEventListener('click', () => {
     console.log(`Previous number: ${previousNum}\n Current number: ${currentNum}\n Operator: ${operator}`);
     calculate(previousNum, operator, currentNum);
@@ -46,6 +73,7 @@ equal.addEventListener('click', () => {
 
 //adding event to the decimal button and set it to disable after 
 //pressing it once, so you can't add more than one decimal per number
+
 function addDecimal() {
     currentNum += '.';
     displaySct2.textContent = currentNum;
@@ -76,21 +104,29 @@ function getNumber(number) {
 };
 
 //setting the operators to variables
-function getOperator(op) {
+/* function getOperator(op) {
     operator = op.trim();
-    if (currentNum == '') {      //add the option to insert negative numbers
+    if (currentNum === '') { // add the option to insert negative numbers
         currentNum += operator;
         displaySct2.textContent = currentNum;
+    } else if (previousNum !== '' && operator !== '') { // perform pending calculation
+        calculate(previousNum, operator, currentNum);
+        previousNum = result;
+        currentNum = '';
+        operator = op.trim();
+        displaySct2.textContent = previousNum + operator;
     } else {
         previousNum = currentNum;
         displaySct2.textContent = previousNum + operator;
         currentNum = '';
         decimal.disabled = false;
         key.disabled = false;
-    };
-};
+    }
+} */
 
-//check if user try to divide by 0
+
+// if calculator wants to prin error, this function will
+//make the font size smaller, so the text will fit the display
 function changeDS2FontSize(size) {
     switch (size) {
         case 'big': 
@@ -106,6 +142,7 @@ function changeDS2FontSize(size) {
     }
 }
 
+//check if user try to divide by 0
 function evaluate0() {
     if (currentNum == 0 || previousNum == 0 && operator == '/') {
         displaySct1.textContent = 'ERROR!';
