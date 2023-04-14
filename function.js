@@ -39,16 +39,17 @@ operatorBtn.forEach((btn) => {
 */
 operatorBtn.forEach((btn) => {
     btn.addEventListener('click', (e) => {
+        equal.disabled = false;
         if (operator !== '') {
             calculate(previousNum, operator, currentNum);
             currentNum = result;
             result = '';
-            previousNum = result;
+            previousNum = '';
         }
         operator = e.target.textContent.trim();
         if (currentNum == '') {      //add the option to insert negative numbers
             currentNum += operator;
-            operator ='';
+            operator = '';
             displaySct2.textContent = currentNum;
         } else {
             previousNum = currentNum;
@@ -67,6 +68,9 @@ equal.addEventListener('click', () => {
     calculate(previousNum, operator, currentNum);
     console.log(`The result is: ${result}`);
     currentNum = result;
+    operator = '';
+    previousNum = '';
+    equal.disabled = true;
 });
 
 //FUNCTIONS
@@ -90,6 +94,7 @@ function clearCalculator() {
     operator = '';
     result = '';
     decimal.disabled = false;
+    equal.disabled = false;
 };
 
 //setting the nummbers to variables and print them to the screen
@@ -129,11 +134,11 @@ function getNumber(number) {
 //make the font size smaller, so the text will fit the display
 function changeDS2FontSize(size) {
     switch (size) {
-        case 'big': 
-        displaySct2.style.fontSize = '2em';
+        case 'big':
+            displaySct2.style.fontSize = '2em';
             break;
-        case 'small': 
-        displaySct2.style.fontSize = '1.5em';
+        case 'small':
+            displaySct2.style.fontSize = '1.5em';
             break;
         default:
             displaySct2.style.fontSize = '2em';
@@ -178,20 +183,22 @@ function calculate(num1, sign, num2) {
                 displaySct2.textContent = 'There was a problem';
                 break;
         }
-        //checks if the numbers is a float, so it can print the decimals
-        if (result.toString().length > 10) {
-            clearCalculator();
+        
+        if (result.toString().length > 10) {        //checks the length of the result
+            result = result.toFixed(10);
+            changeDS2FontSize('small');
+            displaySct2.textContent = result;
+            /*clearCalculator();
             displaySct1.textContent = 'ERROR!';
             changeDS2FontSize('small');
-            displaySct2.textContent = 'Number is too big';
-        } else if (result % 1 !== 0) {
+            displaySct2.textContent = 'Number is too big';*/
+        } else if (result % 1 !== 0) {         //checks if the numbers is a float, so it can print the decimals
             result = result.toFixed(2);
         } else {
-            displaySct1.textContent = displaySct2.textContent;
+            //displaySct1.textContent = displaySct2.textContent;
             displaySct2.textContent = result;
-            console.log(`result length is: ${result.length}`);
         }
-        key.disabled = true;
+        key.disabled = false; //in caz de apare bug, aici era true inainte
         changeDS2FontSize('big');
     } catch (error) {
         console.log(error.message);
@@ -200,7 +207,8 @@ function calculate(num1, sign, num2) {
 }
 
 /*
-- dupa ce calculez, si apas o tasta, sa se stearga tot de pe ecran sau rezultatul sa devina previous number;
-- sa afiseze erori daca 0/0
+DONE: - dupa ce calculez, si apas o tasta, sa se stearga tot de pe ecran sau rezultatul sa devina previous number;
+DONE: - sa afiseze erori daca 0/0
 - daca am apasat semnul unei operatii, iar apoi noi schimbam semnul
+- dupa ce apasam egal, daca apasam un numar sa se stearga ecranul
 */
