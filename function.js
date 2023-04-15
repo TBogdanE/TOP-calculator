@@ -98,11 +98,13 @@ equal.addEventListener('click', () => {
     operator = operator.trim();
     if (currentNum == '' && operator == '' && previousNum == '') {
         displaySct1.textContent = 'ERROR!';
+        console.log('Error');
         changeDS2FontSize('small');
         displaySct2.textContent = 'Nothing to calculate';
     } else if (/*previousNum == '' ||*/ operator != '' && currentNum == '') {
         clearCalculator();
         displaySct1.textContent = 'ERROR!';
+        console.log('Error');
         changeDS2FontSize('small');
         displaySct2.textContent = 'You didn\'t add the second number';
     } else {
@@ -147,10 +149,14 @@ function getNumber(number) {
     if (currentNum.length >= 6) {
         key.disabled = true;
     } else if (currentNum == '0') {
-        currentNum *= 0;
+        key.disabled = true;
+        console.log(`check 0: ${currentNum}`)
         if (previousNum == '0') {
-            previousNum *= 0;
-        }
+            key.disabled = true;
+        };
+    } else if (result != '') {
+        clearCalculator();
+        console.log('Calculator was cleared, because result != \' \' ');
     } else {
         currentNum += Number(number);
         displaySct2.textContent = previousNum + operator + currentNum;
@@ -199,8 +205,9 @@ function changeDS2FontSize(size) {
 
 //check if user try to divide by 0
 function evaluateCalculator() {
-    if (currentNum == '0' || previousNum == '0' && operator == '/') {
+    if (currentNum == '0' && operator == '/' || previousNum == '0' && operator == '/') {
         displaySct1.textContent = 'ERROR!';
+        console.log('Error');
         changeDS2FontSize('small');
         displaySct2.textContent = 'You can\'t divide a number by 0';
     };
