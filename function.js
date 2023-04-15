@@ -40,6 +40,36 @@ operatorBtn.forEach((btn) => {
 operatorBtn.forEach((btn) => {
     btn.addEventListener('click', (e) => {
         equal.disabled = false;
+        if (operator !== '') {  // an operator has already been selected
+            if (currentNum === '') {  // user has not yet entered a number
+                operator = e.target.textContent.trim();  // update the operator variable
+                displaySct2.textContent = previousNum + operator;
+                return;
+            }
+            // calculate the result with the current operator
+            calculate(previousNum, operator, currentNum);
+            currentNum = result;
+            result = '';
+            previousNum = '';
+        }
+        operator = e.target.textContent.trim();
+        if (currentNum == '') {  // add the option to insert negative numbers
+            currentNum += operator;
+            operator = '';
+            displaySct2.textContent = currentNum;
+        } else {
+            previousNum = currentNum;
+            displaySct2.textContent = previousNum + operator;
+            currentNum = '';
+            decimal.disabled = false;
+            key.disabled = false;
+        };
+    });
+});
+
+/*operatorBtn.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+        equal.disabled = false;
         if (operator !== '') {
             calculate(previousNum, operator, currentNum);
             currentNum = result;
@@ -60,18 +90,32 @@ operatorBtn.forEach((btn) => {
         };
     });
 });
+*/
 
 
 //on equal button press, will execute calculate funtion, and console.log provided info
 equal.addEventListener('click', () => {
-    console.log(`Previous number: ${previousNum}\n Current number: ${currentNum}\n Operator: ${operator}`);
-    calculate(previousNum, operator, currentNum);
-    console.log(`The result is: ${result}`);
-    currentNum = result;
-    operator = '';
-    previousNum = '';
-    equal.disabled = true;
+    operator = operator.trim();
+    if (currentNum == '' && operator == '' && previousNum == '') {
+        displaySct1.textContent = 'ERROR!';
+        changeDS2FontSize('small');
+        displaySct2.textContent = 'Nothing to calculate';
+    } else if (/*previousNum == '' ||*/ operator != '' && currentNum == '') {
+        clearCalculator();
+        displaySct1.textContent = 'ERROR!';
+        changeDS2FontSize('small');
+        displaySct2.textContent = 'You didn\'t add the second number';
+    } else {
+        console.log(`Previous number: ${previousNum}\n Current number: ${currentNum}\n Operator: ${operator}`);
+        calculate(previousNum, operator, currentNum);
+        console.log(`The result is: ${result}`);
+        currentNum = result;
+        operator = '';
+        previousNum = '';
+        equal.disabled = true;
+    };
 });
+
 
 //FUNCTIONS
 
@@ -89,6 +133,7 @@ function clearCalculator() {
     currentNum = '';
     displaySct1.textContent = '';
     displaySct2.textContent = '';
+    changeDS2FontSize('big');
     previousNum = '';
     currentOp = '';
     operator = '';
@@ -101,6 +146,11 @@ function clearCalculator() {
 function getNumber(number) {
     if (currentNum.length >= 6) {
         key.disabled = true;
+    } else if (currentNum == '0') {
+        currentNum *= 0;
+        if (previousNum == '0') {
+            previousNum *= 0;
+        }
     } else {
         currentNum += Number(number);
         displaySct2.textContent = previousNum + operator + currentNum;
@@ -138,7 +188,7 @@ function changeDS2FontSize(size) {
             displaySct2.style.fontSize = '2em';
             break;
         case 'small':
-            displaySct2.style.fontSize = '1.5em';
+            displaySct2.style.fontSize = '1.2em';
             break;
         default:
             displaySct2.style.fontSize = '2em';
@@ -148,67 +198,62 @@ function changeDS2FontSize(size) {
 }
 
 //check if user try to divide by 0
-function evaluate0() {
-    if (currentNum == 0 || previousNum == 0 && operator == '/') {
+function evaluateCalculator() {
+    if (currentNum == '0' || previousNum == '0' && operator == '/') {
         displaySct1.textContent = 'ERROR!';
         changeDS2FontSize('small');
         displaySct2.textContent = 'You can\'t divide a number by 0';
-        throw new Error('You can\'t divide by 0');
     };
 };
 
 //doing the operations
 function calculate(num1, sign, num2) {
-    try {
-        evaluate0();
-        num1 = parseFloat(num1);
-        num2 = parseFloat(num2);
-        switch (sign) {
-            case '+':
-                result = (num1 + num2);
-                break;
-            case '-':
-                result = (num1 - num2);
-                break;
-            case 'x':
-                result = (num1 * num2);
-                break;
-            case '/':
-                result = (num1 / num2);
-                break;
-            case '%':
-                result = (num1 % num2);
-                break;
-            default:
-                displaySct2.textContent = 'There was a problem';
-                break;
-        }
-        
-        if (result.toString().length > 10) {        //checks the length of the result
-            result = result.toFixed(10);
+    evaluateCalculator();
+    num1 = parseFloat(num1);
+    num2 = parseFloat(num2);
+    switch (sign) {
+        case '+':
+            result = (num1 + num2);
+            break;
+        case '-':
+            result = (num1 - num2);
+            break;
+        case 'x':
+            result = (num1 * num2);
+            break;
+        case '/':
+            result = (num1 / num2);
+            break;
+        case '%':
+            result = (num1 % num2);
+            break;
+        default:
             changeDS2FontSize('small');
-            displaySct2.textContent = result;
-            /*clearCalculator();
-            displaySct1.textContent = 'ERROR!';
-            changeDS2FontSize('small');
-            displaySct2.textContent = 'Number is too big';*/
-        } else if (result % 1 !== 0) {         //checks if the numbers is a float, so it can print the decimals
-            result = result.toFixed(2);
-        } else {
-            //displaySct1.textContent = displaySct2.textContent;
-            displaySct2.textContent = result;
-        }
-        key.disabled = false; //in caz de apare bug, aici era true inainte
-        changeDS2FontSize('big');
-    } catch (error) {
-        console.log(error.message);
-        return;
+            displaySct2.textContent = 'There was a problem';
+            break;
     }
+    changeDS2FontSize('big');
+    if (result.toString().length > 10) {        //checks the length of the result
+        result = result.toFixed(10);
+        changeDS2FontSize('small');
+        displaySct2.textContent = result;
+        /*clearCalculator();
+        displaySct1.textContent = 'ERROR!';
+        changeDS2FontSize('small');
+        displaySct2.textContent = 'Number is too big';*/
+    } else if (result % 1 !== 0) {         //checks if the numbers is a float, so it can print the decimals
+        result = result.toFixed(2);
+    } else {
+        //displaySct1.textContent = displaySct2.textContent;
+        displaySct2.textContent = result;
+    }
+    key.disabled = false; //in caz de apare bug, aici era true inainte
 }
 
 /*
 DONE: - dupa ce calculez, si apas o tasta, sa se stearga tot de pe ecran sau rezultatul sa devina previous number;
 DONE: - sa afiseze erori daca 0/0
-- daca am apasat semnul unei operatii, iar apoi noi schimbam semnul
+DONE - daca am apasat semnul unei operatii, iar apoi noi schimbam semnul
 - dupa ce apasam egal, daca apasam un numar sa se stearga ecranul
+- sa nu putem introduce 01 de ex;
 */
