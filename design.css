@@ -41,6 +41,7 @@ body {
     flex-direction: column;
     background-color: rgb(106, 133, 106);
     font-family: 'Segment7Standard';
+    text-shadow: 2px 2px 0px rgb(47, 47, 47,0.4);
     font-style: italic;
     height: 4em;
     width: 75%;
