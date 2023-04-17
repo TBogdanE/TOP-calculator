@@ -125,9 +125,13 @@ equal.addEventListener('click', () => {
 //pressing it once, so you can't add more than one decimal per number
 
 function addDecimal() {
-    currentNum += '.';
-    displaySct2.textContent = currentNum;
-    decimal.disabled = true;
+    if (currentNum == '') {
+        decimal.disabled = true;
+    } else {
+        currentNum += '.';
+        displaySct2.textContent = currentNum;
+        decimal.disabled = true;
+    };
 };
 
 //clear the display when clicking 'C' button
@@ -146,6 +150,7 @@ function clearCalculator() {
 
 //setting the nummbers to variables and print them to the screen
 function getNumber(number) {
+    decimal.disabled = false;
     if (currentNum.length >= 6) {
         key.disabled = true;
     } else if (currentNum == '0') {
@@ -253,6 +258,8 @@ function calculate(num1, sign, num2) {
         displaySct2.textContent = 'Number is too big';*/
     } else if (result % 1 !== 0) {         //checks if the numbers is a float, so it can print the decimals
         result = result.toFixed(2);
+        displaySct2.textContent = result;
+        console.log(result);
     } else {
         //displaySct1.textContent = displaySct2.textContent;
         displaySct2.textContent = result;
@@ -265,5 +272,6 @@ DONE: - dupa ce calculez, si apas o tasta, sa se stearga tot de pe ecran sau rez
 DONE: - sa afiseze erori daca 0/0
 DONE - daca am apasat semnul unei operatii, iar apoi noi schimbam semnul
 DONE - dupa ce apasam egal, daca apasam un numar sa se stearga ecranul
-- sa nu putem introduce 01 de ex;
+DONE - sa nu putem introduce 01 de ex;
+- sa nu putem introduce virgula daca nu avem numar
 */
