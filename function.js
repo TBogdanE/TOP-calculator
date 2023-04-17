@@ -154,9 +154,12 @@ function getNumber(number) {
         if (previousNum == '0') {
             key.disabled = true;
         };
-    } else if (result != '') {
+        //if we press equal and we have a result displayed, if we press another number it will clear the calculator
+    } else if (result != '' && operator == '') {
         clearCalculator();
-        console.log('Calculator was cleared, because result != \' \' ');
+        currentNum = number;
+        displaySct2.textContent = currentNum;
+        console.log('Calculator was cleared, because result has value and key was pressed');
     } else {
         currentNum += Number(number);
         displaySct2.textContent = previousNum + operator + currentNum;
@@ -261,6 +264,6 @@ function calculate(num1, sign, num2) {
 DONE: - dupa ce calculez, si apas o tasta, sa se stearga tot de pe ecran sau rezultatul sa devina previous number;
 DONE: - sa afiseze erori daca 0/0
 DONE - daca am apasat semnul unei operatii, iar apoi noi schimbam semnul
-- dupa ce apasam egal, daca apasam un numar sa se stearga ecranul
+DONE - dupa ce apasam egal, daca apasam un numar sa se stearga ecranul
 - sa nu putem introduce 01 de ex;
 */
