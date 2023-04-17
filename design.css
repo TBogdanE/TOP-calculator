@@ -11,28 +11,46 @@ body {
     justify-content: flex-start;
     align-items: center;
     flex-direction: column;
-    background-color: grey;
-    border-radius: 0.5em;
-    width: 18em;
+    background-color: rgb(142, 142, 142);
+    border: 0.3em solid rgb(47, 47, 47);
+    border-radius: 0.8em;
+    width: 20em;
     height: 100%;
-    padding: 1em;
+    padding: 2em 0.5em 2em 0.5em;
+}
+
+#calculator-header {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    flex-direction: column;
+    height: 2em;
+    width: 80%;
+}
+
+#calculator-header-title {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-style: italic;
+    font-weight: 1000;
+    font-size: 1.3em;
+    color: #2d2d2d;
 }
 
 #calculator-display {
     display: flex;
     flex-direction: column;
-    background-color: rgb(135, 169, 135);
+    background-color: rgb(106, 133, 106);
     font-family: 'Segment7Standard';
     font-style: italic;
     height: 4em;
-    width: 80%;
-    border-radius: 0.3em;
+    width: 75%;
     text-align: right;
     padding: 0.5em;
-    border: 0.1em solid black;
+    border: 0.15em solid #2d2d2d;
+    border-radius: 0.3em;
 }
 
-#calculator-display-section-1 { 
+#calculator-display-section-1 {
     flex-grow: 1;
     font-size: 1.2em;
     transition: 0.1s ease-in;
@@ -49,11 +67,12 @@ body {
     justify-content: space-between;
     align-items: center;
     flex-direction: row;
-    width: 80%;
+    width: 85%;
     flex-flow: wrap;
     margin-top: 0.5em;
 }
 
+/*
 .key {
     background-color: grey;
     border: 0.1em solid black;
@@ -61,17 +80,45 @@ body {
     border-radius: 0.2em;
     font-family: 'Segment7Standard';
     font-style: italic;
-    width: 4em;
+    width: 4.6em;
     height: 4em;
     text-align: center;
     transition: 0.1s ease-in-out;
+}*/
+
+.key {
+    font-family: 'Segment7Standard';
+    font-style: italic;
+    width: 4.4em;
+    height: 4.2em;
+    margin: 0.3em;
+    text-decoration: none;
+    text-transform: uppercase;
+    background-color: rgb(142, 142, 142);
+    color: #2d2d2d;
+    cursor: pointer;
+    border: 0.15em solid;
+    border-radius: 0.3em;
+    padding: 1em;
+    box-shadow: 1px 1px 0px 0px, 1px 1px 0px 0px, 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px;
+    position: relative;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    transition: 0.2s ease-in-out;
+}
+
+.key:active {
+    box-shadow: 0px;
+    top: 0.15em;
+    left: 0.1em;
 }
 
 .key-double {
-    width: 8em;
-    background-color: rgb(119, 94, 94);
+    width: 9.6em;
+    background-color: rgb(156, 77, 77);
 }
 
 .key:hover {
-    filter: brightness(90%);
+    filter: brightness(85%);
 }
