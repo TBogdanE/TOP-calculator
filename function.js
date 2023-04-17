@@ -29,35 +29,35 @@ key.forEach((btn) => {
 });
 
 //getting the operator btn
-
-/*
-operatorBtn.forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-        getOperator(e.target.textContent);
-    });
-});
-*/
 operatorBtn.forEach((btn) => {
     btn.addEventListener('click', (e) => {
         equal.disabled = false;
-        if (operator !== '') {  // an operator has already been selected
-            if (currentNum === '') {  // user has not yet entered a number
+        //this block of code is used so we can change our operator if we chosed a wrong one
+        if (operator !== '') {  // checks if an operator has already been selected
+            if (currentNum === '') {  //checks if user has not yet entered the second number
                 operator = e.target.textContent.trim();  // update the operator variable
                 displaySct2.textContent = previousNum + operator;
                 return;
             }
-            // calculate the result with the current operator
             calculate(previousNum, operator, currentNum);
             currentNum = result;
             result = '';
             previousNum = '';
         }
         operator = e.target.textContent.trim();
-        if (currentNum == '') {  // add the option to insert negative numbers
-            currentNum += operator;
-            operator = '';
-            displaySct2.textContent = currentNum;
+        //this block checks if instead of selecting a number firstly
+        //we select an operator, so we can introduce negative numbers
+        if (currentNum == '' && previousNum == '') {  // add the option to insert negative numbers, others operator used will not work
+            if (operator == '-') {
+                currentNum += operator;
+                operator = '';
+                displaySct2.textContent = currentNum;
+            } else {
+                operator = '';
+            }
         } else {
+            //this block just do the calculations 
+            //if no condition was meet 
             previousNum = currentNum;
             displaySct2.textContent = previousNum + operator;
             currentNum = '';
@@ -66,32 +66,6 @@ operatorBtn.forEach((btn) => {
         };
     });
 });
-
-/*operatorBtn.forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-        equal.disabled = false;
-        if (operator !== '') {
-            calculate(previousNum, operator, currentNum);
-            currentNum = result;
-            result = '';
-            previousNum = '';
-        }
-        operator = e.target.textContent.trim();
-        if (currentNum == '') {      //add the option to insert negative numbers
-            currentNum += operator;
-            operator = '';
-            displaySct2.textContent = currentNum;
-        } else {
-            previousNum = currentNum;
-            displaySct2.textContent = previousNum + operator;
-            currentNum = '';
-            decimal.disabled = false;
-            key.disabled = false;
-        };
-    });
-});
-*/
-
 
 //on equal button press, will execute calculate funtion, and console.log provided info
 equal.addEventListener('click', () => {
@@ -172,28 +146,6 @@ function getNumber(number) {
     };
 };
 
-//setting the operators to variables
-/* function getOperator(op) {
-    operator = op.trim();
-    if (currentNum === '') { // add the option to insert negative numbers
-        currentNum += operator;
-        displaySct2.textContent = currentNum;
-    } else if (previousNum !== '' && operator !== '') { // perform pending calculation
-        calculate(previousNum, operator, currentNum);
-        previousNum = result;
-        currentNum = '';
-        operator = op.trim();
-        displaySct2.textContent = previousNum + operator;
-    } else {
-        previousNum = currentNum;
-        displaySct2.textContent = previousNum + operator;
-        currentNum = '';
-        decimal.disabled = false;
-        key.disabled = false;
-    }
-} */
-
-
 // if calculator wants to prin error, this function will
 //make the font size smaller, so the text will fit the display
 function changeDS2FontSize(size) {
@@ -273,5 +225,6 @@ DONE: - sa afiseze erori daca 0/0
 DONE - daca am apasat semnul unei operatii, iar apoi noi schimbam semnul
 DONE - dupa ce apasam egal, daca apasam un numar sa se stearga ecranul
 DONE - sa nu putem introduce 01 de ex;
-- sa nu putem introduce virgula daca nu avem numar
+DONE- sa nu putem introduce virgula daca nu avem numar
+DONE - sa nu putem introduce alt operator decat minus inainte de a introduce primul nr
 */
