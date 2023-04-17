@@ -21,6 +21,26 @@ clear.addEventListener('click', clearCalculator);
 decimal.addEventListener('click', addDecimal);
 equal.addEventListener('click', calculate);
 
+
+
+//getting number values from the keyboard
+key.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+        getNumber(e.target.textContent);
+    });
+});
+
+
+
+//getting the operator btn
+operatorBtn.forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+        getOperator(e.target.textContent);
+    });
+});
+
+
+
 document.addEventListener('keydown', function (event) {
     switch (event.key) {
         case '1': getNumber(1);
@@ -66,19 +86,66 @@ document.addEventListener('keydown', function (event) {
     };
 });
 
-//getting number values from the keyboard
-key.forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-        getNumber(e.target.textContent);
-    });
+
+
+//on equal button press, will execute calculate funtion, and console.log provided info
+equal.addEventListener('click', () => {
+    operator = operator.trim();
+    if (currentNum == '' && operator == '' && previousNum == '') {
+        displaySct1.textContent = 'ERROR!';
+        console.log('Error');
+        changeDS2FontSize('small');
+        displaySct2.textContent = 'Nothing to calculate';
+    } else if (operator != '' && currentNum == '') {
+        clearCalculator();
+        displaySct1.textContent = 'ERROR!';
+        console.log('Error');
+        changeDS2FontSize('small');
+        displaySct2.textContent = 'You didn\'t add the second number';
+    } else {
+        console.log(`Previous number: ${previousNum}\n Current number: ${currentNum}\n Operator: ${operator}`);
+        calculate(previousNum, operator, currentNum);
+        console.log(`The result is: ${result}`);
+        currentNum = result;
+        operator = '';
+        previousNum = '';
+        equal.disabled = true;
+    };
 });
 
-//getting the operator btn
-operatorBtn.forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-        getOperator(e.target.textContent);
-    });
-});
+
+
+//FUNCTIONS ************************************************************
+
+
+
+//setting the nummbers to variables and print them to the screen
+function getNumber(number) {
+    //decimal.disabled = false;
+    if (currentNum.length >= 6) {
+        key.disabled = true;
+    } else if (currentNum == '0') {
+        key.disabled = true;
+        console.log(`check 0: ${currentNum}`)
+        if (previousNum == '0') {
+            key.disabled = true;
+        };
+        //if we press equal and we have a result displayed, if we press another number it will clear the calculator
+    } else if (result !== '' && operator == '') {
+        clearCalculator();
+        currentNum = number;
+        displaySct2.textContent = currentNum;
+        console.log('Calculator was cleared, because result has value and key was pressed');
+    } else {
+        currentNum += Number(number);
+        displaySct2.textContent = previousNum + operator + currentNum;
+        console.log(number);
+    };
+};
+
+
+
+//getting operators
 function getOperator(op) {
     equal.disabled = false;
     //this block of code is used so we can change our operator if we chosed a wrong one
@@ -115,41 +182,18 @@ function getOperator(op) {
     };
 };
 
-//on equal button press, will execute calculate funtion, and console.log provided info
-equal.addEventListener('click', () => {
-    operator = operator.trim();
-    if (currentNum == '' && operator == '' && previousNum == '') {
-        displaySct1.textContent = 'ERROR!';
-        console.log('Error');
-        changeDS2FontSize('small');
-        displaySct2.textContent = 'Nothing to calculate';
-    } else if (operator != '' && currentNum == '') {
-        clearCalculator();
-        displaySct1.textContent = 'ERROR!';
-        console.log('Error');
-        changeDS2FontSize('small');
-        displaySct2.textContent = 'You didn\'t add the second number';
-    } else {
-        console.log(`Previous number: ${previousNum}\n Current number: ${currentNum}\n Operator: ${operator}`);
-        calculate(previousNum, operator, currentNum);
-        console.log(`The result is: ${result}`);
-        currentNum = result;
-        operator = '';
-        previousNum = '';
-        equal.disabled = true;
-    };
-});
 
 
-//FUNCTIONS
-
-//adding event to the decimal button and set it to disable after 
-//pressing it once, so you can't add more than one decimal per number
-
+//decimal function
 function addDecimal() {
+    //won't let user input decimal if no number was inserted already
     if (currentNum == '') {
         decimal.disabled = true;
+    } else if(decimal.disabled == true) {
+        return;
     } else {
+        //adding event to the decimal button and make it disable after 
+        //pressing it once, so you can't add more than one decimal per number
         currentNum += '.';
         displaySct2.textContent = currentNum;
         decimal.disabled = true;
@@ -170,56 +214,7 @@ function clearCalculator() {
     equal.disabled = false;
 };
 
-//setting the nummbers to variables and print them to the screen
-function getNumber(number) {
-    decimal.disabled = false;
-    if (currentNum.length >= 6) {
-        key.disabled = true;
-    } else if (currentNum == '0') {
-        key.disabled = true;
-        console.log(`check 0: ${currentNum}`)
-        if (previousNum == '0') {
-            key.disabled = true;
-        };
-        //if we press equal and we have a result displayed, if we press another number it will clear the calculator
-    } else if (result != '' && operator == '') {
-        clearCalculator();
-        currentNum = number;
-        displaySct2.textContent = currentNum;
-        console.log('Calculator was cleared, because result has value and key was pressed');
-    } else {
-        currentNum += Number(number);
-        displaySct2.textContent = previousNum + operator + currentNum;
-        console.log(number);
-    };
-};
 
-// if calculator wants to prin error, this function will
-//make the font size smaller, so the text will fit the display
-function changeDS2FontSize(size) {
-    switch (size) {
-        case 'big':
-            displaySct2.style.fontSize = '2em';
-            break;
-        case 'small':
-            displaySct2.style.fontSize = '1.2em';
-            break;
-        default:
-            displaySct2.style.fontSize = '2em';
-            break;
-
-    }
-}
-
-//check if user try to divide by 0
-function evaluateCalculator() {
-    if (currentNum == '0' && operator == '/' || previousNum == '0' && operator == '/') {
-        displaySct1.textContent = 'ERROR!';
-        console.log('Error');
-        changeDS2FontSize('small');
-        displaySct2.textContent = 'You can\'t divide a number by 0';
-    };
-};
 
 //doing the operations
 function calculate(num1, sign, num2) {
@@ -262,10 +257,40 @@ function calculate(num1, sign, num2) {
             //displaySct1.textContent = displaySct2.textContent;
             displaySct2.textContent = result;
             console.log(`3) no condition met: ${result}`);
-        }
-    }
+        };
+    };
     key.disabled = false; //in caz de apare bug, aici era true inainte
-}
+};
+
+
+
+// if calculator wants to prin error, this function will
+//make the font size smaller, so the text will fit the display
+function changeDS2FontSize(size) {
+    switch (size) {
+        case 'big':
+            displaySct2.style.fontSize = '2em';
+            break;
+        case 'small':
+            displaySct2.style.fontSize = '1.2em';
+            break;
+        default:
+            displaySct2.style.fontSize = '2em';
+            break;
+    };
+};
+
+
+
+//check if user try to divide by 0
+function evaluateCalculator() {
+    if (currentNum == '0' && operator == '/' || previousNum == '0' && operator == '/') {
+        displaySct1.textContent = 'ERROR!';
+        console.log('Error');
+        changeDS2FontSize('small');
+        displaySct2.textContent = 'You can\'t divide a number by 0';
+    };
+};
 
 /*
 DONE: - dupa ce calculez, si apas o tasta, sa se stearga tot de pe ecran sau rezultatul sa devina previous number;
