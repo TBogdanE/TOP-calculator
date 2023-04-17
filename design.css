@@ -22,6 +22,8 @@ body {
     display: flex;
     flex-direction: column;
     background-color: rgb(135, 169, 135);
+    font-family: 'Segment7Standard';
+    font-style: italic;
     height: 4em;
     width: 80%;
     border-radius: 0.3em;
@@ -33,11 +35,13 @@ body {
 #calculator-display-section-1 { 
     flex-grow: 1;
     font-size: 1.2em;
+    transition: 0.1s ease-in;
 }
 
 #calculator-display-section-2 {
     flex-grow: 2;
     font-size: 2em;
+    transition: 0.1s ease-in;
 }
 
 #calculator-keyboard {
@@ -55,6 +59,8 @@ body {
     border: 0.1em solid black;
     margin: 0.1em;
     border-radius: 0.2em;
+    font-family: 'Segment7Standard';
+    font-style: italic;
     width: 4em;
     height: 4em;
     text-align: center;
