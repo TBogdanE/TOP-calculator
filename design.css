@@ -41,7 +41,7 @@ body {
     flex-direction: column;
     background-color: rgb(106, 133, 106);
     font-family: 'Segment7Standard';
-    text-shadow: 2px 2px 0px rgb(47, 47, 47,0.4);
+    text-shadow: 2px 2px 0px rgb(47, 47, 47, 0.4);
     font-style: italic;
     height: 4em;
     width: 75%;
@@ -122,4 +122,49 @@ body {
 
 .key:hover {
     filter: brightness(85%);
+}
+
+footer {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    background-color: #333;
+    color: #3e3e3e;
+    text-align: center;
+    font-size: 0.8em;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 10px;
+    transition: 0.2s ease-in-out;
+}
+
+footer:hover {
+    background-color: #333;
+    color: #939393;
+}
+
+footer:hover a {
+    color: #939393;
+}
+
+footer a {
+    color: #3e3e3e;
+}
+
+.f-sct {
+    width: 30%;
+}
+
+.f-sct a {
+    text-decoration: none;
+    transition: 0.2s ease-in-out;
+    padding: 0.5em;
+}
+
+.f-sct a:hover {
+    color: #d0d0d0;
+    text-decoration: underline;
 }
