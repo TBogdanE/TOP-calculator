@@ -40,7 +40,7 @@ operatorBtn.forEach((btn) => {
 });
 
 
-
+//gets keybord input
 document.addEventListener('keydown', function (event) {
     switch (event.key) {
         case '1': getNumber(1);
@@ -91,11 +91,13 @@ document.addEventListener('keydown', function (event) {
 //on equal button press, will execute calculate funtion, and console.log provided info
 equal.addEventListener('click', () => {
     operator = operator.trim();
+    //checks if we have entered the numbers and the operator
     if (currentNum == '' && operator == '' && previousNum == '') {
         displaySct1.textContent = 'ERROR!';
         console.log('Error');
         changeDS2FontSize('small');
         displaySct2.textContent = 'Nothing to calculate';
+        //checks if we want to calculate withouut inserting the second number
     } else if (operator != '' && currentNum == '') {
         clearCalculator();
         displaySct1.textContent = 'ERROR!';
@@ -121,21 +123,18 @@ equal.addEventListener('click', () => {
 
 //setting the nummbers to variables and print them to the screen
 function getNumber(number) {
-    //decimal.disabled = false;
-    if (currentNum.length >= 6) {
+    displaySct1.textContent = ''; //clears the dirst sct of the display, in case it remeaned an error message
+    changeDS2FontSize('big');
+    if (currentNum.length >= 6) { //checks if the number is too long
         key.disabled = true;
-    } else if (currentNum == '0') {
+    } else if (currentNum == '0') {// checks if the number is 0, so it won't let user input another number along 0
         key.disabled = true;
-        console.log(`check 0: ${currentNum}`)
-        if (previousNum == '0') {
-            key.disabled = true;
-        };
-        //if we press equal and we have a result displayed, if we press another number it will clear the calculator
+        // checks if user tries to add number when calculator is displaying 
+        //the result, and it's clearing the calculator for the next operation
     } else if (result !== '' && operator == '') {
         clearCalculator();
         currentNum = number;
         displaySct2.textContent = currentNum;
-        console.log('Calculator was cleared, because result has value and key was pressed');
     } else {
         currentNum += Number(number);
         displaySct2.textContent = previousNum + operator + currentNum;
@@ -163,17 +162,15 @@ function getOperator(op) {
     operator = op.trim();
     //this block checks if instead of selecting a number firstly
     //we select an operator, so we can introduce negative numbers
-    if (currentNum == '' && previousNum == '') {  // add the option to insert negative numbers, others operator used will not work
-        if (operator == '-') {
+    if (currentNum == '' && previousNum == '') { 
+        if (operator == '-') { // add the option to insert only minus operator, other operators used will not work
             currentNum += operator;
             operator = '';
             displaySct2.textContent = currentNum;
         } else {
-            operator = '';
+            operator = ''; //if user inputs any other operator than minus, it will not be added
         }
     } else {
-        //this block just do the calculations 
-        //if no condition was meet 
         previousNum = currentNum;
         displaySct2.textContent = previousNum + operator;
         currentNum = '';
@@ -186,14 +183,14 @@ function getOperator(op) {
 
 //decimal function
 function addDecimal() {
-    //won't let user input decimal if no number was inserted already
+    //won't let user input decimal if no number was inserted firstly
     if (currentNum == '') {
         decimal.disabled = true;
-    } else if(decimal.disabled == true) {
+    } else if (decimal.disabled == true) {
         return;
     } else {
         //adding event to the decimal button and make it disable after 
-        //pressing it once, so you can't add more than one decimal per number
+        //pressing it once, so you can't add more than one decimal
         currentNum += '.';
         displaySct2.textContent = currentNum;
         decimal.disabled = true;
@@ -218,7 +215,9 @@ function clearCalculator() {
 
 //doing the operations
 function calculate(num1, sign, num2) {
-    evaluateCalculator();
+    if (evaluateCalculator()) {
+        return;
+    };
     num1 = parseFloat(num1);
     num2 = parseFloat(num2);
     switch (sign) {
@@ -243,12 +242,14 @@ function calculate(num1, sign, num2) {
             break;
     }
     changeDS2FontSize('big');
-    if (result % 1 !== 0) {         //checks if the numbers is a float, so it can print the decimals
+    if (result % 1 !== 0) {         //checks if the numbers is a float, so it can print only 2 decimals
         result = result.toFixed(2);
         displaySct2.textContent = result;
         console.log(`2) float: ${result}`);
     } else {
-        if (result.toString().length > 10) {        //checks the length of the result
+        //checks the length of the result, so it can make the font 
+        //smaller for numbers to fit on the screen
+        if (result.toString().length > 10) {        
             result = result.toFixed(10);
             changeDS2FontSize('small');
             displaySct2.textContent = result;
@@ -259,7 +260,7 @@ function calculate(num1, sign, num2) {
             console.log(`3) no condition met: ${result}`);
         };
     };
-    key.disabled = false; //in caz de apare bug, aici era true inainte
+    key.disabled = false; 
 };
 
 
@@ -289,7 +290,9 @@ function evaluateCalculator() {
         console.log('Error');
         changeDS2FontSize('small');
         displaySct2.textContent = 'You can\'t divide a number by 0';
+        return true;
     };
+    return false;
 };
 
 /*
@@ -300,5 +303,5 @@ DONE - dupa ce apasam egal, daca apasam un numar sa se stearga ecranul
 DONE - sa nu putem introduce 01 de ex;
 DONE- sa nu putem introduce virgula daca nu avem numar
 DONE - sa nu putem introduce alt operator decat minus inainte de a introduce primul nr
-- adaugare suport tastatura
+DONE - adaugare suport tastatura
 */
